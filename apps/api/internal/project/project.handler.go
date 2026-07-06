@@ -2,7 +2,6 @@ package project
 
 import (
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/utils"
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gosimple/slug"
 )
@@ -26,11 +25,9 @@ func (h *Handler) CreateProject(c fiber.Ctx) error {
 		})
 	}
 
-	validate := validator.New()
-
-	if err := validate.Struct(dto); err != nil {
+	if err := utils.ValidateStruct(dto); err != nil {
 		return c.Status(400).JSON(fiber.Map{
-			"message": utils.FormatValidationErrors(err),
+			"message": err,
 		})
 	}
 
@@ -83,11 +80,9 @@ func (h *Handler) UpdateProject(c fiber.Ctx) error {
 		})
 	}
 
-	validate := validator.New()
-
-	if err := validate.Struct(dto); err != nil {
+	if err := utils.ValidateStruct(dto); err != nil {
 		return c.Status(400).JSON(fiber.Map{
-			"message": utils.FormatValidationErrors(err),
+			"message": err,
 		})
 	}
 

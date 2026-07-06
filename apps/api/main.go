@@ -6,6 +6,7 @@ import (
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/database"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/migrations"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/project"
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -15,6 +16,8 @@ func main() {
     database.Connect()
 
     migrations.Migrate()
+
+    utils.InitValidator()
 
     api := app.Group("/api")
 
