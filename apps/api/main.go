@@ -6,6 +6,7 @@ import (
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/database"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/migrations"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/project"
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/user"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -21,9 +22,8 @@ func main() {
 
     api := app.Group("/api")
 
-    project.RegisterRoutes(
-        api.Group("/projects"),
-    )
+    project.RegisterRoutes(api.Group("/projects"))
+    user.RegisterRoutes(api.Group("/users"))
 
     app.Get("/", func(c fiber.Ctx) error {
         return c.SendString("Hello, World!")
