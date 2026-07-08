@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/auth"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/database"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/migrations"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/project"
@@ -22,8 +23,9 @@ func main() {
 
     api := app.Group("/api")
 
-    project.RegisterRoutes(api.Group("/projects"))
+    auth.RegisterRoutes(api)
     user.RegisterRoutes(api.Group("/users"))
+    project.RegisterRoutes(api.Group("/projects"))
 
     app.Get("/", func(c fiber.Ctx) error {
         return c.SendString("Hello, World!")

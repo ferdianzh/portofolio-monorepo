@@ -20,12 +20,20 @@ func (r *Repository) FindAll() ([]User, error) {
 	return users, err
 }
 
-func (r *Repository) FindOne(id string) (User, error) {
+func (r *Repository) FindOne(id string) (*User, error) {
 	var user User
 
 	err := database.DB.First(&user, id).Error
 
-	return user, err
+	return &user, err
+}
+
+func (r *Repository) FindByEmail(email string) (*User, error) {
+	var user User
+
+	err := database.DB.Where("email = ?", email).First(&user).Error
+
+	return &user, err
 }
 
 func (r *Repository) Update(user *User, id string) error {
