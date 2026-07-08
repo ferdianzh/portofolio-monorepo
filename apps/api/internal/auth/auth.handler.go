@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"strconv"
-
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/user"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/utils"
 	jwtware "github.com/gofiber/contrib/v3/jwt"
@@ -54,7 +52,7 @@ func (h *Handler) Login(c fiber.Ctx) error {
 		return c.Status(401).JSON(credErrMsg)
 	}
 
-	token, err := utils.GenerateToken(user.ID)
+	token, err := utils.GenerateToken(user.ID.String())
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": err.Error(),
@@ -70,9 +68,9 @@ func (h *Handler) findUserDetail(c fiber.Ctx) error {
 	u := jwtware.FromContext(c)
 	claims := u.Claims.(jwt.MapClaims)
 	
-	id := int(claims["sub"].(float64))
+	id := claims["sub"].(string)
 
-	user, err := h.userRepo.FindOne(strconv.Itoa(id))
+	user, err := h.userRepo.FindOne(id)
 
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{

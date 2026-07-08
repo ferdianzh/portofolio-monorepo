@@ -25,7 +25,7 @@ func (r *Repository) FindAll() ([]Project, error) {
 func (r *Repository) FindOne(id string) (Project, error) {
 	var project Project
 
-	err := database.DB.First(&project, id).Error
+	err := database.DB.Where("id = ?", id).First(&project).Error
 
 	return project, err
 }

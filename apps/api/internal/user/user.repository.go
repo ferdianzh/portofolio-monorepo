@@ -23,7 +23,7 @@ func (r *Repository) FindAll() ([]User, error) {
 func (r *Repository) FindOne(id string) (*User, error) {
 	var user User
 
-	err := database.DB.First(&user, id).Error
+	err := database.DB.Where("id = ?", id).First(&user).Error
 
 	return &user, err
 }
