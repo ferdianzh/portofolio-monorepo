@@ -4,14 +4,16 @@ import (
 	"log"
 
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/database"
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/permission"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/project"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/user"
 )
 
 func Migrate() {
 	migErr := database.DB.AutoMigrate(
-		&project.Project{},
+		&permission.Permission{},
 		&user.User{},
+		&project.Project{},
 	)
 
 	if migErr != nil {
