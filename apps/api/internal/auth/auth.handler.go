@@ -52,7 +52,13 @@ func (h *Handler) Login(c fiber.Ctx) error {
 		return c.Status(401).JSON(credErrMsg)
 	}
 
-	token, err := utils.GenerateToken(user.ID.String())
+	var roleId *string
+	if user.RoleID != nil {
+		rid := user.RoleID.String()
+		roleId = &rid
+	}
+
+	token, err := utils.GenerateToken(user.ID.String(), roleId)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": err.Error(),

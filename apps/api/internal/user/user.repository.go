@@ -15,7 +15,7 @@ func (r *Repository) Create(user *User) error {
 func (r *Repository) FindAll() ([]User, error) {
 	var users []User
 
-	err := database.DB.Find(&users).Error
+	err := database.DB.Preload("Role").Find(&users).Error
 
 	return users, err
 }
@@ -23,7 +23,7 @@ func (r *Repository) FindAll() ([]User, error) {
 func (r *Repository) FindOne(id string) (*User, error) {
 	var user User
 
-	err := database.DB.Where("id = ?", id).First(&user).Error
+	err := database.DB.Preload("Role").Where("id = ?", id).First(&user).Error
 
 	return &user, err
 }
