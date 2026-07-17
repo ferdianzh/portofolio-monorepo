@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/response"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/user"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/utils"
 	jwtware "github.com/gofiber/contrib/v3/jwt"
@@ -27,29 +28,21 @@ func (h *Handler) Login(c fiber.Ctx) error {
 	var dto LoginDTO
 
 	if err := c.Bind().Body(&dto); err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"message": "invalid request",
-		})
+		return response.Error(c, 400, "invalid request", err)
 	}
 
 	if err := utils.ValidateStruct(dto); err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"message": err,
-		})
-	}
-
-	credErrMsg := fiber.Map{
-		"message": "Invalid credentials",
+		return response.Error(c, 400, "invalid request", err)
 	}
 
 	user, err := h.userRepo.FindByEmail(dto.Email)
 	if err != nil {
-		return c.Status(401).JSON(credErrMsg)
+		return response.Error(c, 401, "invalid credentials", err)
 	}
 
 	isMatch := utils.ComparePassword(user.Password, dto.Password)
 	if isMatch == false {
-		return c.Status(401).JSON(credErrMsg)
+		return response.Error(c, 401, "invalid credentials", nil)
 	}
 
 	var roleId *string
@@ -60,12 +53,10 @@ func (h *Handler) Login(c fiber.Ctx) error {
 
 	token, err := utils.GenerateToken(user.ID.String(), roleId)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, 500, "internal server error", err)
 	}
 
-	return c.JSON(fiber.Map{
+	return response.Success(c, 200, "login success", fiber.Map{
 		"token": token,
 	})
 }
@@ -79,10 +70,8 @@ func (h *Handler) findUserDetail(c fiber.Ctx) error {
 	user, err := h.userRepo.FindOne(id)
 
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{
-			"message": err,
-		})
+		return response.Error(c, 500, "internal server error", err)
 	}
 
-	return c.JSON(user)
+	return response.Success(c, 200, "user detail retrieved", user)
 }

@@ -3,6 +3,7 @@ package permission
 import (
 	"strings"
 
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/response"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -22,9 +23,7 @@ func (h *Handler) FindAll(c fiber.Ctx) error {
 	grouped := c.Query("grouped")
 
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, 500, "internal server error", err)
 	}
 
 	if grouped == "1" {
@@ -33,8 +32,8 @@ func (h *Handler) FindAll(c fiber.Ctx) error {
 			key, _, _ := strings.Cut(permission.Alias, ".")
 			groupedPermissions[key] = append(groupedPermissions[key], permission)
 		}
-		return c.JSON(groupedPermissions)
+		return response.Success(c, 200, "permissions retrieved", groupedPermissions)
 	}
 
-	return c.JSON(permissions)
+	return response.Success(c, 200, "permissions retrieved", permissions)
 }
