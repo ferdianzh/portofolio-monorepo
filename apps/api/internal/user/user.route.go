@@ -6,9 +6,11 @@ func RegisterRoutes(router fiber.Router) {
 	repo := NewRepository()
 	handler := NewHandler(repo)
 
-	router.Post("/", handler.Create)
-	router.Get("/", handler.FindAll)
-	router.Get("/:id", handler.FindOne)
-	router.Put("/:id", handler.Update)
-	router.Delete(":id", handler.Delete)
+	group := router.Group("users")
+
+	group.Post("/", handler.Create)
+	group.Get("/", handler.FindAll)
+	group.Get("/:id", handler.FindOne)
+	group.Put("/:id", handler.Update)
+	group.Delete(":id", handler.Delete)
 }

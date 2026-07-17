@@ -6,7 +6,9 @@ import (
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/auth"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/database"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/migrations"
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/permission"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/project"
+	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/role"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/seeder"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/user"
 	"github.com/ferdianzh/portofolio-monorepo/apps/api/internal/utils"
@@ -29,8 +31,10 @@ func main() {
     api := app.Group("/api")
 
     auth.RegisterRoutes(api)
-    user.RegisterRoutes(api.Group("/users"))
-    project.RegisterRoutes(api.Group("/projects"))
+    permission.RegisterRoutes(api)
+    role.RegisterRoutes(api)
+    user.RegisterRoutes(api)
+    project.RegisterRoutes(api)
 
     app.Get("/", func(c fiber.Ctx) error {
         return c.SendString("Hello, World!")
