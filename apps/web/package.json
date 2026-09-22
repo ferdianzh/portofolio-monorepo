@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@mantine/core": "^9.5.2",
+    "@mantine/form": "^9.6.1",
     "@mantine/hooks": "^9.5.2",
+    "@phosphor-icons/react": "^2.1.10",
     "@repo/ui": "workspace:*",
     "next": "16.2.0",
     "react": "^19.2.0",
