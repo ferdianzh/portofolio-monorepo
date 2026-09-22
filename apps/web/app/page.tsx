@@ -1,19 +1,25 @@
 import { Button, Flex, Title } from "@mantine/core";
 import Works from "./components/Works";
-import Skills from "./components/Skills";
 import styles from "./page.module.css";
+import { Work } from "@/types/work";
+import { getAllWorks } from "@/services/works";
+import Contact from "./components/Contact";
 
-export default function Home() {
+export default async function Home() {
+  const works: Work[] = await getAllWorks();
+
   return (
-    <Flex className="page" direction="column" gap="xl" align="center">
+    <Flex className="page" direction="column" align="center">
       {/* intro section */}
       <Flex
         component="section"
+        id="section-intro"
         className={styles.section}
         direction="column"
         align="center"
+        justify="center"
         gap="lg"
-        pt="8rem"
+        h="100svh"
       >
         <Flex direction="column" align="center">
           <Title>
@@ -30,11 +36,11 @@ export default function Home() {
         </Flex>
       </Flex>
 
-      <section className={styles.section}>
-        <Works />
+      <section id="section-works" className={styles.section}>
+        <Works works={works} />
       </section>
-      <section className={styles.section}>
-        <Skills />
+      <section id="section-contact" className={styles.section}>
+        <Contact />
       </section>
     </Flex>
   );
